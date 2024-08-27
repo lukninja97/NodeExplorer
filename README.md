@@ -1,5 +1,7 @@
 # NodeExpoler
-![nodeexplorer200](https://github.com/user-attachments/assets/389bcbcb-a224-48c7-b83c-49e0f3d21f2c)
+![splashg](https://github.com/user-attachments/assets/bb6e16a0-6016-4a78-8c41-1d89276d497c)
+![listg](https://github.com/user-attachments/assets/96b4be6b-5afd-4f57-88d0-b4b92cb68862)
+
 ## Build tools & versions used
 - [Kotlin] - Linguagem de programação - 1.9.0
 - [Android Studio] - IDE -  Koala | 2024.1.1
