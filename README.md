@@ -38,6 +38,7 @@ With more time, I thought about:
 - Displaying an AlertDialog when a node is selected to display additional information, thus removing some information from the list.
 - Creating a sorting option based on specific information such as: Capacity, Channels, creation and update date.
 - Adding the position number of each node.
+- Add a search by node name (alias)
 
 ## What do you think is the weakest part of your project?
 The error handling part coming from the API could be standardized and separated from the verifications and test coverage.The error handling part coming from the API could be standardized and separated from the verifications and test coverage.
