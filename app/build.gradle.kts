@@ -53,6 +53,10 @@ dependencies {
     implementation(libs.squareup.retrofit.converter.gson)
     implementation(libs.squareup.okhhtp3.logging.interceptor)
     testImplementation(libs.junit)
+    testImplementation(libs.mockito.core)
+    testImplementation(libs.mockito.inline)
+    testImplementation(libs.androidx.arch.core.testing)
+    testImplementation(libs.kotlinx.coroutines.test)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 }
