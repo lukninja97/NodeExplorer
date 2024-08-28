@@ -6,5 +6,9 @@
          <item name="colorSecondary">@color/purple</item>
     </style>
 
+    <style name="Alias">
+        <item name="android:textColor">@color/purpleDark</item>
+    </style>
+
     <style name="Theme.NodeExplorer" parent="Base.Theme.NodeExplorer" />
 </resources>
