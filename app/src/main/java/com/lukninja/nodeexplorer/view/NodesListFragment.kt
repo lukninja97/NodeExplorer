@@ -8,6 +8,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.lukninja.nodeexplorer.databinding.FragmentNodesListBinding
+import com.lukninja.nodeexplorer.service.model.Node
+import com.lukninja.nodeexplorer.service.util.ApiResult
 import com.lukninja.nodeexplorer.view.adapter.NodeAdapter
 import com.lukninja.nodeexplorer.viewmodel.NodeViewModel
 
@@ -30,7 +32,7 @@ class NodesListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        adapter = NodeAdapter(viewModel.nodeList.value) {
+        adapter = NodeAdapter(mutableListOf()) {
             //TODO Click item list
         }
 
@@ -45,31 +47,37 @@ class NodesListFragment : Fragment() {
 
     private fun observers() {
         viewModel.nodeList.observe(viewLifecycleOwner) {
-            adapter.updateNodes(it)
-            binding.rvNodes.visibility = View.VISIBLE
-            binding.progress.visibility = View.INVISIBLE
-            binding.swipeRefresh.isRefreshing = false
-            binding.imgError.visibility = View.GONE
-            binding.tvError.visibility = View.GONE
-        }
+            when(it) {
+                is ApiResult.Loading -> showLoading()
 
-        viewModel.error.observe(viewLifecycleOwner) {
-            binding.swipeRefresh.isRefreshing = false
-            binding.rvNodes.visibility = View.INVISIBLE
-            binding.progress.visibility = View.INVISIBLE
-            binding.imgError.visibility = View.VISIBLE
-            binding.tvError.visibility = View.VISIBLE
+                is ApiResult.Success -> showNodes(it.data)
 
-            binding.tvError.text = when(it) {
-                "Empty list" -> {
-                    binding.imgError.visibility = View.INVISIBLE
-                    "Lista vazia, recarregue a página mais tarde"
-                }
-                else -> {
-                    "Aconteceu algum erro, recarrega a página"
-                }
+                is ApiResult.Error -> showError(it.message)
             }
         }
+    }
+
+    private fun showLoading() {
+        binding.progress.visibility = View.VISIBLE
+        binding.rvNodes.visibility = View.INVISIBLE
+    }
+
+    private fun showNodes(nodes: List<Node>) {
+        adapter.updateNodes(nodes)
+        binding.rvNodes.visibility = View.VISIBLE
+        binding.progress.visibility = View.INVISIBLE
+        binding.swipeRefresh.isRefreshing = false
+        binding.imgError.visibility = View.GONE
+        binding.tvError.visibility = View.GONE
+    }
+
+    private fun showError(message: String) {
+        binding.swipeRefresh.isRefreshing = false
+        binding.rvNodes.visibility = View.INVISIBLE
+        binding.progress.visibility = View.INVISIBLE
+        binding.imgError.visibility = View.VISIBLE
+        binding.tvError.visibility = View.VISIBLE
+        binding.tvError.text = message
     }
 
     private fun setupRecycler() {

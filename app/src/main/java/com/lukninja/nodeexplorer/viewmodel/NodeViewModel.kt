@@ -6,14 +6,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lukninja.nodeexplorer.service.model.Node
 import com.lukninja.nodeexplorer.service.repository.NodeRepository
+import com.lukninja.nodeexplorer.service.util.ApiResult
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class NodeViewModel: ViewModel() {
     private val repository = NodeRepository()
 
-    private val mNodeList = MutableLiveData<List<Node>>()
-    val nodeList: LiveData<List<Node>> = mNodeList
+    private val mNodeList = MutableLiveData<ApiResult<List<Node>>>()
+    val nodeList: LiveData<ApiResult<List<Node>>> = mNodeList
 
     private val mError = MutableLiveData<String>()
     val error: LiveData<String> = mError
@@ -21,18 +22,10 @@ class NodeViewModel: ViewModel() {
     fun load() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                repository.getLargerConnectedNodes()?.let { nodeList ->
-                    if (nodeList.isNotEmpty()){
-                        mNodeList.postValue(nodeList)
-                    } else {
-                        mError.postValue("Bad request")
-                    }
-                } ?: run {
-                    mError.postValue("Empty list")
-                }
-
+                mNodeList.postValue(ApiResult.Loading)
+                mNodeList.postValue(repository.getLargerConnectedNodes())
             } catch (e: Exception){
-                mError.postValue(e.message)
+                mNodeList.postValue(ApiResult.Error("Falha ao carregar os dados", e))
             }
         }
     }
